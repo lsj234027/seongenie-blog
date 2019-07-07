@@ -1,5 +1,5 @@
 ---
-title: Vue CLI 3로 Vue 시작하기 - 01. 설치하기
+title: Vue CLI 3 - 01. 설치하기
 date: 2019-07-07 16:07:84
 category: Vue.js
 ---
