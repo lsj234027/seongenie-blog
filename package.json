@@ -50,6 +50,8 @@
     "typography-theme-github": "^0.16.18"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
+    "babel-preset-gatsby": "^0.2.1",
     "date-fns": "^1.30.1",
     "eslint": "^5.14.1",
     "eslint-plugin-react": "^7.11.1",

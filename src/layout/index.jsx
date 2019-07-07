@@ -7,6 +7,7 @@ import { Footer } from '../components/footer'
 import { rhythm } from '../utils/typography'
 
 import './index.scss'
+import '../../static/fontawesome/css/all.css'
 
 export const Layout = ({ location, title, children }) => {
   const rootPath = `${__PATH_PREFIX__}/`
