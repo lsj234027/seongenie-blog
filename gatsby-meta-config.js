@@ -2,11 +2,11 @@ module.exports = {
   title: `Seongenie Blog`,
   description: `Blog posted about ...`,
   author: `seongenie`,
-  introduction: `I explain with words and code. I explain with words and code. I explain with words and code.`,
-  siteUrl: `https://gatsby-starter-bee.netlify.com`, // Your blog site url
+  introduction: `Hi. 😃 This is a personal blog for learning development skills, languages, frameworks and so on.`,
+  siteUrl: `http://seongenie.com/blog`, // Your blog site url
   social: {
     twitter: ``, // Your Twitter account
-    github: ``, // Your GitHub account
+    github: `lsj234027`, // Your GitHub account
     medium: ``, // Your Medium account
     facebook: ``, // Your Facebook account
   },
