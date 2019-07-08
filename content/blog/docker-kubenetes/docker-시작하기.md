@@ -83,7 +83,7 @@ $ sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
 
 3. docker 가 제대로 설치되었는지 확인한다. 
-    - docker ps 명령어를 입력하여 docker 가 제대로 설치되었는지 확인.
+    - `docker ps` 명령어를 입력하여 docker 가 제대로 설치되었는지 확인.
 
 ```sh
 $ sudo docker ps
