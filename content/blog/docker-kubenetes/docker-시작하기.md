@@ -4,13 +4,6 @@ date: 2019-07-08 14:07:47
 category: docker-kubenetes
 ---
 
----
-title: docker 시작하기
-date: 2019-07-07 18:07:16
-category: docker / kubenetes
----
-
-
 Docker 설치는 각 환경에 맞게 여러가지 방법이 존재한다.
 위 참고 사이트에 접속하여 OS를 선택하여 
 본 글은 Ubuntu 환경으로 설치하겠습니다. 
