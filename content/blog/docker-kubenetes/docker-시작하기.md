@@ -1,25 +1,32 @@
 ---
-title: docker 시작하기
-date: 2019-07-08 14:07:47
+title: 01. docker 시작하기
+date: 2019-07-08 13:30:47
 category: docker-kubenetes
 ---
 
-Docker 설치는 각 환경에 맞게 여러가지 방법이 존재한다.
-위 참고 사이트에 접속하여 OS를 선택하여 
-본 글은 Ubuntu 환경으로 설치하겠습니다. 
-> [Docker docs](https://docs.docker.com/) \
-> [Docker ubuntu install guide](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+### 💡 Docker 란 무엇인가?
+__Docker__ 는 Linux 기반의 Conatiner 관리 기술이다. Container 는 VM 과 비슷하면서도 다른데, Container 는 같은 머신 안에서 __namespace__ 와 __cgroups__ 를 독립적으로 구분하여 프로세스 공간을 할당한다. 각 어플리케이션은 마치 가상화한 것처럼 별도로 동작하지만 같은 하드웨어를 사용하기 때문에 VM에 비해 성능 저하가 눈에 띄게 적다.
 
+### 💡 Docker 설치
+__Docker__ 설치는 각 환경에 맞게 여러가지 방법이 존재한다.
+위 참고 사이트에 접속하여 자신의 환경에 맞는 __OS__를 선택하고 설치하면 된다.
+
+이 글은 __Ubuntu__ 환경에서 설치하는걸 예제로 든다.
+### 💡 Official 사이트
+> [Docker docs](https://docs.docker.com/) \
+> [Docker install guide \(ubuntu\)](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 ---
 
 
-1. apt package를 업데이트 한다.
+## ✔️ _Docker_ 설치 사전 준비
+
+1. 먼저 apt package를 업데이트 한다.
 
 ```sh
 $ sudo apt-get update
 ```
 
-2. Install packages to allow apt to use a repository over HTTPS:
+2. apt 명령어가 HTTPS 를 통해 저장소를 사용할 수 있도록 필요한 패키지들을 설치한다.
 
 ```sh
 $ sudo apt-get install \
@@ -30,14 +37,13 @@ $ sudo apt-get install \
         software-properties-common
 ```
 
-3. Add Docker’s official GPG key:
+3. Docker 의 official GPG key 를 추가한다.
 
 ```sh
 $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 ```
 
-4. fingerprint 입력 
-Verify that you now have the key with the fingerprint 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88, by searching for the last 8 characters of the fingerprint.
+4. key를 가지고 있는지 확인한다.
 
 ```sh
 $ sudo apt-key fingerprint 0EBFCD88
@@ -51,66 +57,39 @@ Use the following command to set up the stable repository. To add the nightly or
 Note: The lsb_release -cs sub-command below returns the name of your Ubuntu distribution, such as xenial. Sometimes, in a distribution like Linux Mint, you might need to change $(lsb_release -cs) to your parent Ubuntu distribution. For example, if you are using Linux Mint Tessa, you could use bionic. Docker does not offer any guarantees on untested and unsupported Ubuntu distributions.
 ```
 
-#### docker repository 에서 image 검색
+5. docker 다운을 위한 repository 를 추가한다.
 
 ```sh
-$ sudo docker search tomcat
-NAME                          DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED
-tomcat                        Apache Tomcat is an open source implementati…   2446                [OK]                
-tomee                         Apache TomEE is an all-Apache Java EE certif…   66                  [OK]                
-dordoka/tomcat                Ubuntu 14.04, Oracle JDK 8 and Tomcat 8 base…   53                                      [OK]
-bitnami/tomcat                Bitnami Tomcat Docker Image                     28                                      [OK]
+$ sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
 ```
-- NAME 에 tomcat 앞에 이름이 없는 것이 공식 image
 
-#### docker image 내려받기 (tag를 명시하지 않으면 자동으로 latest 버전을 내려 받는다)
+---
+## ✔️ _Docker_ 설치하기
+
+1. 다시 apt 패키지를 업데이트한다. 
+    * 이제 docker 설치를 위한 download.docker.com 도 추가된다.
 
 ```sh
-$ sudo docker pull tomcat
+$ sudo apt-get update
 ```
 
-#### docker image 삭제하기
+2. `apt-get install` 로 docker 를 설치한다. (__ce__: community edition)
 
 ```sh
-$ sudo docker rmi tomcat
+$ sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
 
-#### docker manifest 확인 (layer 체크)
+3. docker 가 제대로 설치되었는지 확인한다. 
+    - docker ps 명령어를 입력하여 docker 가 제대로 설치되었는지 확인.
 
 ```sh
-$ sudo docker inspect tomcat
+$ sudo docker ps
+CONTAINER ID    IMAGE  COMMAND    CREATED   STATUS    PORTS   NAMES
 ```
 
-#### docker 실행 (-d 옵션은 백그라운드에서 실행)
+---
 
-```sh
-$ sudo docker run [image name] [-d]
-$ sudo docker run -t -p [ext_ip]:[int_ip] tomcat
-```
-
-#### docker 컨테이너 조회 (-a 옵션: 실행/비실행 모두 조회, -q: id만 조회)
-
-```sh 
-$ sudo docker ps [-a] [-q]
-```
-
-#### docker 컨테이너 모두 stop 및 삭제
-
-```sh
-$ sudo docker stop $(docker ps -a -q) // docker 컨테이너 모두 정지
-$ sudo docker rm $(docker ps -a -q) // docker 컨테이너 모두 삭제
-```
-
-#### docker 컨테이너의 shell 접속 (it 옵션을 주어야 터미널 접속 가능)
-- __i__: interacive 모드
-- __t__: tty 모드
-
-```sh 
-$ sudo docker exec -it [container_id] /bin/bash
-```
-
-#### docker container start
-
-```sh
-$ sudo docker start $(docker ps -a -q) // docker 컨테이너 모두 정지
-```
+#### 🔽 다음 글 [Docker 컨테이너 조작하기](http://seongenie.com/blog/docker-kubenetes/docker-컨테이너-조작하기/)로 이동
