@@ -92,4 +92,4 @@ CONTAINER ID    IMAGE  COMMAND    CREATED   STATUS    PORTS   NAMES
 
 ---
 
-#### 🔽 다음 글 [Docker 컨테이너 조작하기](http://seongenie.com/blog/docker-kubenetes/docker-컨테이너-조작하기/)로 이동
+#### 🔽 다음 글 [Docker 컨테이너 조작하기](http://seongenie.com/blog/docker-kubernetes/docker-컨테이너-조작하기/)로 이동
