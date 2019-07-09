@@ -45,9 +45,9 @@ spec:
           protocol: TCP
 ```
   주요 필드들이다.
-    - name: 생성할 pod 이름
-    - image: 기반 도커 이미지명 (docker hub에서 pull할 이미지명)
-    - contianerPort: 컨테이너 port 설정
+    - __name__: 생성할 pod 이름
+    - __image__: 기반 도커 이미지명 (docker hub에서 pull할 이미지명)
+    - __contianerPort__: 컨테이너 port 설정
 2. 작성한 yaml 을 이용하여 pod 을 생성하고 시작한다. `kubectl create` 명령어 사용
 ```sh
 $ kubectl create -f pod-image.yaml
@@ -87,7 +87,7 @@ $ kubectl exec jenkins-test -- curl localhost:8080
 
 ---
 
-### ✔️ Labeling 하여 POD 생성하기
+### ✔️ Labeling 하여 Pod 생성하기
 pod 생성시 라벨링하여 생성할 수 있다. 라벨은 키, 밸류형태로 설정 가능하며, 이렇게 하면 추후 pod 검색 및 필터링에 용이하다.
 (예를 들어 app 라벨의 값이 ui 인것만 조회 가능)
 
