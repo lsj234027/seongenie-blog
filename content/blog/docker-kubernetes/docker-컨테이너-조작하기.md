@@ -1,7 +1,7 @@
 ---
 title: 02. docker 컨테이너 조작하기
 date: 2019-07-08 13:50:74
-category: docker-kubenetes
+category: docker-kubernetes
 ---
 
 이 글은 docker 의 기본적인 명령어들을 사용하여 컨테이너를 조작해본다.

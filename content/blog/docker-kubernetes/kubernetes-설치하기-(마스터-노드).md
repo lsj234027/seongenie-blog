@@ -1,7 +1,7 @@
 ---
 title: 05. Kubernetes 설치 및 클러스터 구성하기
 date: 2019-07-09 10:07:37
-category: docker-kubenetes
+category: docker-kubernetes
 ---
 
 ### Master 노드

@@ -1,7 +1,7 @@
 ---
 title: 04. Kubernetes 개요
 date: 2019-07-08 15:07:24
-category: docker-kubenetes
+category: docker-kubernetes
 ---
 
 ![Alt text](https://d33wubrfki0l68.cloudfront.net/1567471e7c58dc9b7d9c65dcd54e60cbf5870daa/da576/_common-resources/images/flower.png) 

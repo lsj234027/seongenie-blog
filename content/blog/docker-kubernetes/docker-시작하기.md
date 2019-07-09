@@ -1,7 +1,7 @@
 ---
 title: 01. docker 시작하기
 date: 2019-07-08 13:30:47
-category: docker-kubenetes
+category: docker-kubernetes
 ---
 
 ### 💡 Docker 란 무엇인가?

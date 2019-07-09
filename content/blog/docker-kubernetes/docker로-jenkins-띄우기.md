@@ -1,7 +1,7 @@
 ---
 title: 03. docker로 jenkins 띄우기
 date: 2019-07-08 14:07:73
-category: docker-kubenetes
+category: docker-kubernetes
 ---
 
 1. jenkins 이미지를 검색한다.
