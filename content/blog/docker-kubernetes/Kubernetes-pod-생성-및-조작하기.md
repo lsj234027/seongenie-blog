@@ -1,0 +1,159 @@
+---
+title: 06. Kubernetes pod 생성 및 조작하기
+date: 2019-07-09 11:07:74
+category: docker-kubernetes
+---
+
+## Kubernetes Pod 생성하기
+> [Kubernetes pod 생성 가이드 (en)](https://kubernetes.io/docs/tasks/configure-pod-container)
+---
+
+### ✔️ yaml 없이 Pod 생성하기
+
+1. `kubectl run --generator=run/v1` 를 사용하면 되는데 권장하지 않는다. 이렇게 생성된 __pod__ 은 default 설정값을 가진다.
+```sh
+$ kubectl run --generator=run/v1 nodejs --image=seongenie/nodejs --port 8080  
+kubectl run --generator=run/v1 is DEPRECATED and will be removed in a future version. Use kubectl create instead.
+replicationcontroller/nodejs created
+```
+
+2. 생성된 __pod__ 조회하기 `kubectl get pod` 뒤에 `-n <namspace>` 를 붙이면 해당 __namespace__ 를 가진 __pod__ 을 조회한다.
+```sh
+$ kubectl get pod
+NAME           READY   STATUS         RESTARTS   AGE
+nodejs-2d4cv   1/1     RUNNING        0          48s
+```
+---
+
+### ✔️ yaml 파일을 작성하여 Pod 생성하기
+1. 먼저 vi로 `파일명.yaml`을 연다. (예제로는 _jenkins_ 이미지를 띄워본다)
+```sh
+$ vi pod-image.yaml
+```
+아래처럼 yaml 파일 내용을 작성한다.
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+      name: jenkins-test
+spec:
+      containers:
+      - name: jenkins
+        image: jenkins
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+```
+  주요 필드들이다.
+    - name: 생성할 pod 이름
+    - image: 기반 도커 이미지명 (docker hub에서 pull할 이미지명)
+    - contianerPort: 컨테이너 port 설정
+2. 작성한 yaml 을 이용하여 pod 을 생성하고 시작한다. `kubectl create` 명령어 사용
+```sh
+$ kubectl create -f pod-image.yaml
+```
+
+3. 생성된 POD 을 조회하여 제대로 띄워졌는지 확인한다.
+```sh
+$ kubectl get pod
+NAME           READY   STATUS         RESTARTS   AGE
+jenkins-test   1/1     RUNNING        0          15s
+```
+
+---
+### ✔️ Pod 포트포워딩
+1. `kubectl port-forward <POD_NAME> <external PORT>:<internal PORT>` 명령어를 pod에 포트포워딩을 할당한다. 그 후, `ctrl + z` 를 눌러 명령어를 빠져나오고 `bg` 명령어를 실행해서 포트포워딩이 백그라운드에서 동작하게 한다.
+```sh
+$ kubectl port-forward jenkins-test 8888:8080
+CTRL^Z
+$ bg
+```
+    
+2. 이제 curl 명령어를 통해 포트포워딩이 정상적으로 동작하는지 확인한다.
+```sh
+$ curl localhost:8888
+<html>
+...
+</html>
+```
+
+3. (부가) `kubectl exec <POD_NAME> -- <CMD>` 을 이용하여 Pod 내부에서 `curl` 명령어를 날려 테스트해볼 수 있다. 내부 포트가 8080 이므로 8080 포트로 `curl` 명령어 실행
+```sh
+$ kubectl exec jenkins-test -- curl localhost:8080
+<html>
+...
+</html>
+```
+
+---
+
+### ✔️ Labeling 하여 POD 생성하기
+pod 생성시 라벨링하여 생성할 수 있다. 라벨은 키, 밸류형태로 설정 가능하며, 이렇게 하면 추후 pod 검색 및 필터링에 용이하다.
+(예를 들어 app 라벨의 값이 ui 인것만 조회 가능)
+
+1. 먼저 vi로 `파일명.yaml`을 연다. (예제로는 _jenkins_ 이미지를 띄워본다)
+```sh
+$ vi pod-jenkins-label.yaml
+```
+아래처럼 yaml 파일 내용을 작성한다.
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+      name: jenkins-test-label
+      namespace: jenkins
+      labels:
+        env: development
+        key1: value1
+spec:
+      containers:
+      - name: jenkins
+        image: jenkins
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+```
+2. `kubectl create` 를 사용하여 pod 을 생성한다. (기존 pod 생성과 동일하다. yaml 파일에 __labels__ 필드만 추가)
+```sh
+$ kubectl create -f pod-jenkins-label.yaml
+```
+
+3. 생성된 pod 조회
+```sh
+$ kubectl get pod --show-labels -n jenkins
+```
+위 명령어는 _(1)_ `--show-labels` 를 추가하여 pod 조회시 라벨이 같이 조회되도록 하고, _(2)_ `-n jenkins` 를 추가하여 jenkins 네임스페이스에 해당하는 pod 을 조회한다.
+
+
+### 💡 Labeling 된 Pod 조회 명령어 모음
+- pod 조회 (라벨도 같이 조회)
+```sh
+$ kubectl get pod --show-labels
+```
+- 라벨 추가 (--overwrite 를 뒤에 추가시 기존에 이미 있는 라벨 덮어쓰기 가능)
+```sh
+$ kubectl label pod jenkins-test-label env=production
+```
+- pod 조회 "env", "key1" 라벨이 컬럼으로 보여진다.
+```sh
+$ kubectl get pod -L 'env,key1'
+```
+- "env" 라벨값이 "production" 인 pod 만 조회한다.
+```sh
+$ kubectl get pod (--show-labels) -l env=production
+```
+
+---
+
+### 💡 kubectl 조작 명령어 정리 
+##### (모든 명령어 뒤에 `-n <namespace>` 가능)
+- `kubectl get node` : 노드 조회
+- `kubectl get services` : 네임스페이스 내 모든 서비스의 목록 조회 (services 대신 svc로 대체 가능)
+- `kubectl get pods -o wide` : 네임스페이스 내 모든 pod 의 상세 목록 조회
+- `kubectl get pods -o yaml` : pod 의 yaml 설정 조회
+- `kubectl describe pod <POD_NAME>` : pod 상세 출력
+- `kubectl logs <POD_NAME>` : pod 의 로그 조회
+- `kubectl exec <POD_NAME> -- <CMD>` : pod 안에서 명령 실행
+- `kubectl delete pod <POD_NAME>` : pod 삭제
+- `kubectl delete pod --all` : 쿠버네티스 pod 전부 삭제
+- `kubectl delete all --all` : 쿠버네티스 리소스 전부 삭제

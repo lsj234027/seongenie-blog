@@ -6,7 +6,7 @@ category: docker-kubernetes
 
 이 글은 docker 의 기본적인 명령어들을 사용하여 컨테이너를 조작해본다.
 
-### 💡 docker repository 에서 image 검색
+### ✔️ docker repository 에서 image 검색
 > ##### `NAME` 에 `/` 앞에 이름이 없는 것이 __official image__
 
 ```sh
@@ -24,7 +24,7 @@ bitnami/tomcat    Bitnami Tomcat Docker Image                     28            
 
 ---
 
-### 💡 docker image 내려받기
+### ✔️ docker image 내려받기
   - 등록되어 있는 docker repository 에서 image 를 내려 받는다. (default: hub.docker.com)
   - tag를 명시하지 않으면 자동으로 latest 버전을 내려 받는다.
 
@@ -37,7 +37,7 @@ latest: Pulling from library/tomcat
 
 ---
 
-### 💡 docker image 조회하기
+### ✔️ docker image 조회하기
   - pull, build, load 등으로 로컬에 저장된 docker image 들을 조회한다.
   - `-a` 옵션은 모든 이미지를, `-q` 옵션은 __IMAGE ID__만 조회한다.
 
@@ -50,7 +50,7 @@ nginx                 v1                  0a9399390b8a        32 hours ago      
 
 ---
 
-### 💡 docker image 삭제하기
+### ✔️ docker image 삭제하기
 * image 한건 삭제
 ```sh
 $ sudo docker rmi <IMAGE ID>
@@ -62,7 +62,7 @@ $ sudo docker rmi $(sudo docker images -a -q)
 
 ---
 
-### 💡 docker manifest 확인 (layer 체크)
+### ✔️ docker manifest 확인 (layer 체크)
 
 ```sh
 $ sudo docker inspect tomcat
@@ -70,7 +70,7 @@ $ sudo docker inspect tomcat
 
 ---
 
-### 💡 docker 컨테이너 실행
+### ✔️ docker 컨테이너 실행
 
 ```sh
 $ sudo docker run -d [image name]
@@ -81,7 +81,7 @@ $ sudo docker run -t -p [외부_ip]:[내부_ip] tomcat
 ```
 ---
 
-### 💡 docker 컨테이너 조회 
+### ✔️ docker 컨테이너 조회 
 
 ```sh 
 $ sudo docker ps
@@ -95,7 +95,7 @@ f5566a13cf94
 
 ---
 
-### 💡 docker 컨테이너 모두 stop 및 삭제
+### ✔️ docker 컨테이너 모두 stop 및 삭제
 
 ```sh
 $ sudo docker stop $(docker ps -a -q) // docker 컨테이너 모두 정지
@@ -104,7 +104,7 @@ $ sudo docker rm $(docker ps -a -q) // docker 컨테이너 모두 삭제
 
 ---
 
-### 💡 docker 컨테이너의 shell 접속 (it 옵션을 주어야 터미널 접속 가능)
+### ✔️ docker 컨테이너의 shell 접속 (it 옵션을 주어야 터미널 접속 가능)
 - __i__: interacive 모드
 - __t__: tty 모드
 
@@ -114,7 +114,7 @@ $ sudo docker exec -it [container_id] /bin/bash
 
 ---
 
-### 💡 docker 컨테이너 시작 및 중지
+### ✔️ docker 컨테이너 시작 및 중지
 
 ```sh
 $ sudo docker start <CONTAINER_ID>
