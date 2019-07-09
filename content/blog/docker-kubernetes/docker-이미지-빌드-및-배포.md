@@ -1,0 +1,32 @@
+---
+title: docker 이미지 빌드 및 배포
+date: 2019-07-09 12:07:13
+category: docker-kubernetes
+---
+
+
+아래 명령어를 수행하여 디렉토리를 만들고 
+```sh
+mkdir my-nodejs
+cp app.js my-nodejs/.
+cd my-nodejs
+```
+
+`vi Dockerfile` 명령어로 Dockerfile 을 작성한다.
+```sh
+# Dockerfile
+FROM node:10
+
+COPY app.js /app.js
+
+CMD ["node", "/app.js"]
+```
+
+
+```sh
+$ docker build -t <USERNAME>/<IMAGE_NAME>:<TAG>
+```
+
+```sh
+$ docker push <IMAGE_NAME>
+```
