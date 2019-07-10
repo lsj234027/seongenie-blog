@@ -157,3 +157,4 @@ $ kubectl get pod (--show-labels) -l env=production
 - `kubectl delete pod <POD_NAME>` : pod 삭제
 - `kubectl delete pod --all` : 쿠버네티스 pod 전부 삭제
 - `kubectl delete all --all` : 쿠버네티스 리소스 전부 삭제
+- `kubectl apply` : 
