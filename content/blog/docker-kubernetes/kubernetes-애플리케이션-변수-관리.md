@@ -1,0 +1,142 @@
+---
+title: 10. Kubernetes 애플리케이션 변수 관리
+date: 2019-07-11 16:07:08
+category: docker-kubernetes
+---
+
+## Docker Container 환경 설정
+- env
+- ConfigMap 
+- Secret
+
+### Env 설정 
+> [Kubernetes docs (env)](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) 에서 yaml 설정 목사
+`vi test-env.yaml`
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: envar-demo
+  labels:
+    purpose: demonstrate-envars
+spec:
+  containers:
+  - name: envar-demo-container
+    image: gcr.io/google-samples/node-hello:1.0
+    env:
+    - name: DEMO_GREETING
+      value: "Hello from the environment"
+    - name: DEMO_FAREWELL
+      value: "Such a sweet sorrow"
+```
+
+```sh
+$ kubectl create -f  test-env.yaml
+pod/envar-demo created
+```
+
+`printenv` 로 환경변수 출력
+```sh
+$ kubectl exec -it envar-demo -- /bin/bash
+root@envar-demo:/# printenv DEMO_FAREWELL
+Such a sweet sorrow
+```
+
+### ConfigMap 설정
+> [Kubernetes docs (configmap)](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/) 참고
+#### yaml 파일 없이 명령어로 configmap 생성
+
+```sh
+$ kubectl create configmap <map-name> <data-source>
+
+$ kubectl get configmaps game-config -o yaml
+```
+#### yaml 파일로 configmap 생성
+
+- yaml파일 작성
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  log_level: INFO
+  test: foo
+```
+
+- configmap 리소스 생성
+
+```sh
+$ kubectl create -f config.yaml
+configmap/config created
+```
+
+- configmap 생성 확인
+
+```sh
+$ kubectl describe configmap config
+Name:         config
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+log_level:
+----
+INFO
+test:
+----
+foo
+Events:  <none>
+```
+
+- pod 에 configmap 연결
+위에 env에서 작성한 yaml 파일 내용을 다음처럼 변경한다
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: envar-demo
+spec:
+  containers:
+  - name: envar-demo-container
+    image: gcr.io/google-samples/node-hello:1.0
+    env:
+    - name: test
+      valueFrom:
+        configMapKeyRef:
+          name: config
+          key: test
+```
+
+- pod 생성
+> 전에 생성한 envar-demo 팟은 삭제 후 실행한다.
+```sh
+$ kubectl create -f test-env.yaml
+pod/envar-demo created
+
+$ kubectl exec -it envar-demo -- /bin/bash
+root@envar-demo:/# printenv test     
+foo
+```
+
+
+### Secret 설정
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  username: YWRtaW4=
+  password: MWYyZDFlMmU2N2Rm
+```
+
+```sh
+$ kubectl apply -f ./secret.yaml
+secret "mysecret" created
+```
