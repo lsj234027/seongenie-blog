@@ -52,7 +52,7 @@ In this template...
 ## 😎 Quick Start
 
 ### 1. Create a Gatsby site.
-
+ 
 ```sh
 # create a new Gatsby site using the blog starter
 $ npx gatsby new my-blog-starter https://github.com/JaeYeopHan/gatsby-starter-bee
